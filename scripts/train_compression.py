@@ -23,6 +23,9 @@ from scipy.linalg import svd
 import os
 import pickle
 
+IMAGE_SIZE = (128, 99)
+BLOCK_SIZE = (64, 64)
+
 
 def run(args):
     directory = args['<directoryname>']
@@ -40,7 +43,7 @@ def run(args):
 
     print 'Resizing and greyscaling...'
 
-    images_processed = [transform.resize(color.rgb2grey(image), (256, 192)) for image in images]
+    images_processed = [transform.resize(color.rgb2grey(image), IMAGE_SIZE) for image in images]
 
     print 'Blocking images...'
 
@@ -52,9 +55,10 @@ def run(args):
 
     for block in blocks[0]:
         vect = block_to_vect(block)
+        # print len(vect)
         training_rows.append(vect)
 
-    training_matrix = matrix(images_processed[0]).transpose()
+    training_matrix = matrix(training_rows).transpose()
 
     print 'Computing SVD...'
 
@@ -62,8 +66,12 @@ def run(args):
 
     compression_matrix = trun_svd.fit_transform(training_matrix)
 
+    print 'Writing matrix to file...'
+
     with open(directory + 'compression.matrix', 'w') as outfile:
         pickle.dump(compression_matrix, outfile)
+
+    print compression_matrix
 
 
 def block_to_vect(block):
@@ -72,11 +80,11 @@ def block_to_vect(block):
 
 
 def get_blocks(image):
-    return extract_patches_2d(image, (64, 64))
+    return extract_patches_2d(image, BLOCK_SIZE)
 
 
 def recover_block(vect):
-    return reshape(vect, (64, 64))
+    return reshape(vect, BLOCK_SIZE)
 
 
 if __name__ == '__main__':
