@@ -19,6 +19,9 @@ from numpy import array
 from numpy import dot
 from numpy import reshape
 from numpy import matrix
+from numpy import fft
+from numpy import multiply
+from scipy.optimize import leastsq
 
 IMAGE_SIZE = (128, 99)
 BLOCK_SIZE = (64, 64)
@@ -49,7 +52,7 @@ def run(args):
     print 'Compressing block vectors...'
     compressed_vects = [compress_vect(image_vects[i], compression_matrix) for i in range(0, len(image_vects))]
 
-    print 'Compression ratio = ' + str(float(len(compressed_vects[0][0]))/float(len(image_vects[0][0])))
+    print 'Compression ratio = ' + str(float(len(compressed_vects[0][0]))/float(len(image_vects[0])))
 
     print 'Decompressing blocks...'
     decomp_blocks = array([recover_block(dot(compression_matrix, compressed_vects[i].transpose())) for i in range(0, len(compressed_vects))])
@@ -59,6 +62,7 @@ def run(args):
 
 
 def block_to_vect(block):
+    fft_block = fft.rfft2(block)
     row = [item for sublist in block for item in sublist]
     return row
 
@@ -69,18 +73,29 @@ def get_blocks(image):
 
 def recover_block(vect):
     new_vect = []
+    max_val = abs(vect[0])
+
     for i in vect:
-        if abs(i) < 1:
-            new_vect.append(i)
-        else:
-            new_vect.append(i/i)
-    return reshape(array(new_vect), BLOCK_SIZE)
+        if abs(i) > max_val:
+            max_val = abs(i)
+
+    if max_val > 1:
+        for i in vect:
+            new_vect.append(i/max_val[0])
+        return reshape(array(new_vect), BLOCK_SIZE)
+
+    return reshape(array(vect), BLOCK_SIZE)
 
 
 def compress_vect(image_vect, compression_matrix):
+    # sklearn least squares
     clf = linear_model.LinearRegression()
     clf.fit(compression_matrix, image_vect.transpose())
     return clf.coef_
+
+
+def score_func(params, xdata, ydata):
+    return ydata - dot(xdata, params)
 
 
 if __name__ == '__main__':

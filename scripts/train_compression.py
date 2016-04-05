@@ -62,16 +62,14 @@ def run(args):
 
     print 'Computing SVD...'
 
-    trun_svd = TruncatedSVD(n_components=num_components)
+    u_matrix, sing_vals, v_matrix = svd(training_matrix, full_matrices=True)# TruncatedSVD(n_components=num_components)
 
-    compression_matrix = trun_svd.fit_transform(training_matrix)
+    compression_matrix = u_matrix[:, :num_components]
 
     print 'Writing matrix to file...'
 
     with open(directory + 'compression.matrix', 'w') as outfile:
         pickle.dump(compression_matrix, outfile)
-
-    print compression_matrix
 
 
 def block_to_vect(block):
