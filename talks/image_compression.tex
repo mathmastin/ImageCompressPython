@@ -136,11 +136,11 @@
 \item An image can be viewed as a matrix where each entry in the matrix represents a pixel.
 
 	\begin{itemize}
-	\item If we greyscale the image the entries are just numbers!
-	\item (otherwise they would be something like triples representing RGB values)
+	\item<2-> If we greyscale the image the entries are just numbers!
+	\item<3-> (otherwise they would be something like triples representing RGB values)
 	\end{itemize}
 
-\item So, we can apply techniques from linear algebra to manipluate images!
+\item<4-> So, we can apply techniques from linear algebra to manipluate images!
 
 \end{itemize}  
 \end{frame}
@@ -150,7 +150,7 @@
 
 \item Given a matrix $M$ we can decompose it as $M = U~\Sigma~V$ where $U$, $\Sigma$, and $V$ have some nice properties.
 
-\item $\Sigma$ is matrix whose non-zero entries are located on the main diagonal and these values contain information about how the columns of $U$ relate to the matrix $M$.
+\item<2-> $\Sigma$ is matrix whose non-zero entries are located on the main diagonal and these values contain information about how the columns of $U$ relate to the matrix $M$.
 
 \end{itemize}  
 \end{frame}
@@ -166,7 +166,7 @@
 
 \item The columns of $U$ whose corresponding values in $\Sigma$ (called singular values) are large can be interpreted as the ``most important'' in relation to $A$.
 
-\item In a sense we can approximate $A$ by only paying attention to the first $N$ ``most important'' columns of $U$.
+\item<2-> In a sense we can approximate $A$ by only paying attention to the first $N$ ``most important'' columns of $U$.
 
 \end{itemize}  
 \end{frame}
@@ -192,9 +192,9 @@
 \begin{itemize}
 \item The original image can be described with two coordinates.
 
-\item The compressed can be described with only one coordinate: the distance along the line from the origin!
+\item<2-> The compressed can be described with only one coordinate: the distance along the line from the origin!
 
-\item So, we have halved the amount of information needed to store the image.
+\item<3-> So, we have halved the amount of information needed to store the image.
 
 \end{itemize}
 
@@ -261,7 +261,7 @@
 \begin{itemize}
 \item I had trouble working with large images in sklearn due to what seem to be memory issues related to blocking high resolution images. 
 
-\item The following is a low resolution example generated in python.
+\item<2-> The following is a low resolution example generated in python.
 \end{itemize}
 
 \end{frame}
