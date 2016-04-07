@@ -8,22 +8,17 @@ import sys
 sys.path.append('')
 
 from docopt import docopt
-from numpy import split
 from numpy import matrix
 from numpy import reshape
 from skimage import io as image_io
-from skimage import img_as_ubyte
 from skimage import color
 from skimage import transform
-from skimage.viewer import ImageViewer
 from sklearn.feature_extraction.image import extract_patches_2d
-from sklearn.feature_extraction.image import reconstruct_from_patches_2d
-from sklearn.decomposition import TruncatedSVD
 from scipy.linalg import svd
 import os
 import pickle
 
-IMAGE_SIZE = (128, 99)
+IMAGE_SIZE = (256, 192)
 BLOCK_SIZE = (64, 64)
 
 
@@ -55,14 +50,13 @@ def run(args):
 
     for block in blocks[0]:
         vect = block_to_vect(block)
-        # print len(vect)
         training_rows.append(vect)
 
     training_matrix = matrix(training_rows).transpose()
 
     print 'Computing SVD...'
 
-    u_matrix, sing_vals, v_matrix = svd(training_matrix, full_matrices=True)# TruncatedSVD(n_components=num_components)
+    u_matrix, sing_vals, v_matrix = svd(training_matrix, full_matrices=True) # TruncatedSVD(n_components=num_components)
 
     compression_matrix = u_matrix[:, :num_components]
 

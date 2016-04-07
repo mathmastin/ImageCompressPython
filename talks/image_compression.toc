@@ -1,0 +1,6 @@
+\beamer@endinputifotherversion {3.36pt}
+\select@language {english}
+\beamer@sectionintoc {1}{Singular Value Decomposition}{3}{0}{1}
+\beamer@sectionintoc {2}{Application to Image Compression}{8}{0}{2}
+\beamer@sectionintoc {3}{The Code}{14}{0}{3}
+\beamer@sectionintoc {4}{Examples}{15}{0}{4}

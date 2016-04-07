@@ -20,10 +20,8 @@ from numpy import dot
 from numpy import reshape
 from numpy import matrix
 from numpy import fft
-from numpy import multiply
-from scipy.optimize import leastsq
 
-IMAGE_SIZE = (128, 99)
+IMAGE_SIZE = (192, 128)
 BLOCK_SIZE = (64, 64)
 
 def run(args):
@@ -41,7 +39,7 @@ def run(args):
     image = transform.resize(color.rgb2grey(image_io.imread(filename)), IMAGE_SIZE)
 
     print 'Saving resized, uncompressed image...'
-    image_io.imsave('original.jpg', image)
+    image_io.imsave('original.jpg', transform.resize(image, (600,800)))
 
     print 'Blocking image...'
     image_blocks = get_blocks(image)
@@ -58,7 +56,12 @@ def run(args):
     decomp_blocks = array([recover_block(dot(compression_matrix, compressed_vects[i].transpose())) for i in range(0, len(compressed_vects))])
 
     print 'Saving image...'
-    image_io.imsave('compressed.' + str(len(compressed_vects[0][0])) + '.jpg', reconstruct_from_patches_2d(decomp_blocks, IMAGE_SIZE))
+
+    new_image = reconstruct_from_patches_2d(decomp_blocks, IMAGE_SIZE)
+
+    new_image_big = transform.resize(new_image, (600,800))
+
+    image_io.imsave('compressed.' + str(len(compressed_vects[0][0])) + '.jpg', new_image_big)
 
 
 def block_to_vect(block):
